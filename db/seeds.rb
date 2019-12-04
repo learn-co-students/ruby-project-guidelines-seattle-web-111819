@@ -46,10 +46,11 @@ User.find_or_create_by(name: "Frank")
 User.find_or_create_by(name: "Grace")
 User.find_or_create_by(name: "Hanna")
 
+Review.find_or_create_by(review_text: "Good!", rating: 10, user_id: 2, game_id: 4)
+
 
 
 games.each do |game|
     Game.find_or_create_by(name: game["name"])
 end
 
-binding.pry

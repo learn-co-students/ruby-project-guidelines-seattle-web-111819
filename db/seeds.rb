@@ -47,6 +47,7 @@ User.find_or_create_by(name: "Grace")
 User.find_or_create_by(name: "Hanna")
 
 Review.find_or_create_by(review_text: "Good!", rating: 10, user_id: 2, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 8, game_id: 4)
 
 
 

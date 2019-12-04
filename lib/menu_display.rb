@@ -26,7 +26,7 @@ end
 # Displays the menu body for string requests
 # Returns the input
 def display_string_menu(prompt, message)
-    puts "\n" * (4 - message.count)
+    puts "\n" * (3 - message.count)
     message.each {|line| puts " " * $sp[:l] + line}
     prompt.each {|line| print "\n" + " " * $sp[:l] + line}
     input = gets.strip

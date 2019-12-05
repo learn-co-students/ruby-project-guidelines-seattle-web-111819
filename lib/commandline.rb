@@ -1,16 +1,3 @@
-#require 'pry'
-#define "run" command
-
-#bin.run.rb
-
-#cli = CommandLine.new
-#cli.welcome
-#system('clear')
-
-
-#class Commandline
-  # def run
-  # end
 
     system('clear')
 
@@ -90,7 +77,7 @@
           water_plants(current_user)
           puts ""
           puts ""
-          # menu(current_user)
+          back_to_main(current_user)
         when "4"
           new_plant(current_user)
           puts ""
@@ -114,17 +101,8 @@
       end
     end
 
-    # def view_members
 
-    #   puts "--- What is your name?: ---"
-    #   puts ""
-    #   Member.all.each_with_index do |member, i|
-    #     puts "(#{i + 1}) #{member.name}"
-    #   end
-    #   puts ""
-    #   puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-    # end
-
+#-----R E A D   M E T H O D S --------------------------------------------------------------
 
     def view_gardens
       #View a list of nearby community gardens and their locations
@@ -155,16 +133,24 @@
         
         puts "---> #{plant.common_name} is #{plant.height} inches tall!"
 
-
+        #returns a string (not an object) using plant's attributes.
       end
     end
 
+#----- U P D A T E   M E T H O D  -----------------------------------------------------
+
     def get_plant_by_name(current_user, common_name)
+      #helper method
+
       desired_plant = Plant.find_by(common_name: common_name, member_id: current_user.id)
       desired_plant
+
+      #saves the selected plant and current user to a variable to be passed into water_plants , and then into plant_to_water
     end
 
     def plant_growth(plant_to_water)
+      #helper method to water_plants, updates height of plant
+
       puts ""
       puts "Thanks for the H2O! Your plant just grew 0.25 inches! :) "
       
@@ -176,6 +162,7 @@
       puts "Your #{plant_to_water.common_name} is now #{plant_to_water.height} inches tall!"
     end
 
+
     def water_plants(current_user)
       #Water your plants
       puts ""
@@ -185,12 +172,65 @@
       view_plants(current_user)
 
       plant_common_name = gets.strip
+
       #user selects which plant
       desired_plant = get_plant_by_name(current_user, plant_common_name)
+
       plant_growth(desired_plant)
 
     end
 
+
+
+#----- C R E A T E   M E T H O D -------------------------------------------------------
+    
+#2
+    def get_garden_by_id(current_user)
+    #get selection of garden by matching name to name in indexed list
+      garden_choice = garden_choices(current_user)
+      Garden.find_by(name: garden_choice).id
+    end
+
+#1
+    def garden_choices(current_user)
+
+      puts "[::PLANT SOMETHING SOMEWHERE::]"
+      puts ""
+      puts "Let's plant a new plant! Which garden would you like to add this plant to? Please pick by Garden Name:"
+      puts ""
+      #show list of gardens 
+      Garden.all.map do |garden, i| puts "#{garden.name.upcase} located in #{garden.location}."
+
+      end
+      #user selects which garden
+      selected_garden = gets.strip.downcase
+      
+    end
+
+
+#3    
+    def new_plant(current_user)
+
+      puts ""
+      puts ""
+      garden_id_choice = get_garden_by_id(current_user)
+      puts ""
+      puts "What should we call your plant?"
+      
+      #user types plant name
+      plant_common_name = gets.strip.downcase
+      
+      #create the new plant using passed in parameters
+      new_plant = Plant.create(common_name: plant_common_name, member_id: current_user.id, garden_id: garden_id_choice, height: 5.0)
+      new_plant
+
+      puts "Yay! Your new plant, #{plant_common_name} has been added!"
+    end
+
+
+
+
+    #----- D E L E T E   M E T H O D ------------------------------------------------------
    
     def remove_plant(current_user)
 
@@ -207,58 +247,13 @@
       desired_plant = get_plant_by_name(current_user, plant_common_name)
       desired_plant.destroy
       puts ""
-      puts "Your #{plant_common_name} has killed itself."
+      puts "Your #{plant_common_name} has died."
 
     end
 
-    #which garden would you like it in? get garden_id likc common name
-    
-    def get_garden_choice(current_user)
-    end
 
-
-    def new_plant(current_user)
-      #Plant a new plant
-      new_plant = Plant.create(common_name: "Kale", member_id: current_user.id, garden_id: 2, height: 9.0)
-      #which garden would you like it in? get garden_id likc common name
-      
-    end
-
+  #------ E X I T ---------------------------------------------
 
     def exit_garden
       puts "Goodbye! Your plants will miss you."
     end
-
-
-    # def run(menu_options)
-      
-    # end
-
-
-  
-
-
-  
-
-  # def help
-
-  # end
-
- # Menu
-  # 1. View a list of all gardens 
-  # 2. Visit a specific garden
-  # 3. Check on your plants (view your plants, check the heights of each plant)
-  # 4. Water your plants (height = +1), can only do this once in a 24hr time period
-  # 5. Plant a new plant (common name, member_id, garden_id, height)
-
-
-
-  # def exit
-  #   puts "Goodbye! Come back soon, your plants will miss you!"
-  # end
-
-  # help, things you can do
-  # - Check out all of the community gardens near you
-  # - Visit a garden to view the plants that you have there
-  # - Check on your plants and water them, check their height after!
-  # - Plant a new plant at your favorite garden!

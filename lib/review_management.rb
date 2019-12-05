@@ -32,11 +32,6 @@ def write_review(user, game, tracer=2)
     menu_routing(user, game, tracer)
 end
 
-# (ROUTER 13): List the User's Reviews
-def my_reviews(user)
-
-end
-
 # (ROUTER 16): Update the User's Review rating
 def update_review_rating(user, game, tracer)
     display_menu_header(["Your Review of", "'#{game.name}'."], user)

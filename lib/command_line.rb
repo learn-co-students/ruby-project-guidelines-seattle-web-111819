@@ -150,6 +150,38 @@ def game_reviews(user, game, tracer=2)
     menu_routing(user, game, router, 9)
 end
 
+# (ROUTER 13): List the User's Reviews
+def my_reviews(user)
+    router = nil
+    message = []
+    # base options
+    reviews = Review.where(user_id: user.id).limit(32).order(:id)
+    options = reviews.map do |review|
+        game = Game.find(review.game_id).name
+        game.length < 25 ? game = game + " " * (24 - game.length) : game = game[0,21] + "..."
+        rat = review.rating.to_s
+        until rat.length == 3
+            rat = " " + rat
+        end
+        rev = review.review_text
+        rev = rev[0,$sp[:w] - 24] + "..." if rev.length > $sp[:w] - 21
+        line = [game + " | " + rat + " | " + rev, review.id * 100]
+        line[0] = line[0] + " " * ($sp[:w] - line[0].length - 7) + "|\n" + " " * $sp[:l] + "|" + "-" * ($sp[:w] - 2) if reviews[-1] == review
+        line
+    end
+    options += [
+        ["Previous Menu", tracer],
+        ["Main Menu", 2],
+        ["Exit", 1]
+    ]
+    until router
+        display_menu_header(["'#{game.name}' reviews:", "", "      Game:                     1-100: Review:"], user)
+        router = display_options_menu(options, message)
+        message = ["Sorry, invalid selection. Please choose again..."]
+    end
+    menu_routing(user, game, router, 13)
+end
+
 # (ROUTER 11): Update Review Menu
 def update_review(user, game, tracer=2)
     router = nil

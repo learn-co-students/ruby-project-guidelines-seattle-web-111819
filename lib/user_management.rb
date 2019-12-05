@@ -54,9 +54,13 @@ def change_name(user)
         entry = display_string_menu(["You can type 'exit' to exit and 'main' to go back.", "Please type your new name:  ",], message)
         exit_game_reviews if entry == "exit"
         main_menu(user) if entry == "main"
-        new_name = entry.split(' ')[0].gsub(/[^a-z]/i, '').downcase.capitalize
+        new_name = ""
+        new_name = entry.split(' ')[0].gsub(/[^a-z]/i, '').downcase.capitalize if entry
         if new_name == "Guest"
             message = ["Sorry, 'guest' is not an acceptable name. Please try again..."]
+            entry = nil
+        elsif new_name.size < 2
+            message = ["Sorry, your name is too short. Please try again..."]
             entry = nil
         elsif User.find_by(name: new_name) && new_name != user.name
             message = ["Sorry, '#{new_name}' is already taken. Please try again..."]

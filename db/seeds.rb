@@ -56,5 +56,19 @@ Review.find_or_create_by(user_id: 13, game_id: 3, rating: 50, review_text: "Simp
 Review.find_or_create_by(user_id: 14, game_id: 3, rating: 50, review_text: "Yet another review")
 Review.find_or_create_by(user_id: 15, game_id: 3, rating: 50, review_text: " ")
 Review.find_or_create_by(user_id: 16, game_id: 3, rating: 10, review_text: " ")
+Review.find_or_create_by(user_id: 2, game_id: 14, rating: 100, review_text: "This game is the absolute best! I've spent about 200 hours playing this game so far and I haven't even taken a bathroom break! Which is weird, because I've had an awful lot of coffee... But whatever, it's amazing! That thing you do in the second level? EPIC! EPIC I TELL YOU!!! That other user, you know the one, he says this game sucks, but he has no idea what he's talking about! This game will be the game of the year! No, no, the game of the CENTURY!! Did I mention it was amazing? Clearly not enough, because it's SUPER DUPER AMAZE-BALLS! I think I may need to eat though. All I've had are cheese balls and Dew. LOTS of Dew. Like EPIC amounts of Dew. Enough to drown a horde of Nifleheim giants! Perhaps I should go befoior eiwaaaaaaaaaaa")
+Review.find_or_create_by(user_id: 2, game_id: 1, rating: 94, review_text: "I'm a long long long long long long long long long long long long long review. Don't delete me! I'm a long long long long long long long long long long long long long review. Don't delete me! I'm a long long long long long long long long long long long long long review.")
+Review.find_or_create_by(user_id: 2, game_id: 2, rating: 80, review_text: "Good!")
+Review.find_or_create_by(user_id: 2, game_id: 4, rating: 90, review_text: "Yeet!")
+Review.find_or_create_by(user_id: 2, game_id: 5, rating: 50, review_text: "Don't delete me!!")
+Review.find_or_create_by(user_id: 2, game_id: 6, rating: 50, review_text: "What?")
+Review.find_or_create_by(user_id: 2, game_id: 7, rating: 50, review_text: "Cool")
+Review.find_or_create_by(user_id: 2, game_id: 8, rating: 50, review_text: "Waste of time, in a good way")
+Review.find_or_create_by(user_id: 2, game_id: 9, rating: 50, review_text: "Yeet again!")
+Review.find_or_create_by(user_id: 2, game_id: 10, rating: 50, review_text: "Aw, CRUD")
+Review.find_or_create_by(user_id: 2, game_id: 11, rating: 50, review_text: "Nonsense")
+Review.find_or_create_by(user_id: 2, game_id: 12, rating: 50, review_text: "Simple")
+Review.find_or_create_by(user_id: 2, game_id: 13, rating: 50, review_text: "Yet another review")
+    
 
 

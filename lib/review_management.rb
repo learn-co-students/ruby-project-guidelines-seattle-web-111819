@@ -21,8 +21,8 @@ def write_review(user, game, tracer=2)
     display_menu_header(["Your Review of", "'#{game.name}'."], user)
     rating = 0
     message = []
-    until rating > 0 && rating < 11
-        entry = display_string_menu(["Please give this game a rating from 1-10:  "], message)
+    until rating > 0 && rating < 101
+        entry = display_string_menu(["Please give this game a rating from 1-100:  "], message)
         message = ["Sorry, invalid entry."]
         rating = entry.to_i
     end
@@ -42,8 +42,8 @@ def update_review_rating(user, game, tracer)
     display_menu_header(["Your Review of", "'#{game.name}'."], user)
     rating = 0
     message = []
-    until rating > 0 && rating < 11
-        entry = display_string_menu(["Please give this game a rating from 1-10:  "], message)
+    until rating > 0 && rating < 101
+        entry = display_string_menu(["Please give this game a rating from 1-100:  "], message)
         message = ["Sorry, invalid entry."]
         rating = entry.to_i
     end

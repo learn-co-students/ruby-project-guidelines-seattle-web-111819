@@ -74,6 +74,7 @@ def choose_game(user)
         exit_game_reviews if entry.downcase == "exit"
         main_menu(user) if entry.downcase == "main"
         game = Game.find_by(lowercase_name: entry.downcase)
+        game = Game.where(["name like ?", "%#{entry.downcase}%"]).limit(1)[0] if !game
         entry = nil if !game
     end
     display_footer(["Found an entry for #{game.name}!"])
@@ -82,6 +83,8 @@ end
 
 # (ROUTER 15): Options menu for the chosen game
 def game_menu(user, game, tracer=2)
+    reviews = Review.where(game_id: game.id)
+    avg_rating = reviews.count == 0 ? " --- " : (reviews.sum(:rating).to_f / reviews.count).round(2)
     router = nil
     message = []
     # base options
@@ -107,7 +110,7 @@ def game_menu(user, game, tracer=2)
     end
     # display loop until validated choice
     until router
-        display_menu_header(["#{game.name}:"], user)
+        display_menu_header(["#{game.name}:", "Release Date: #{Time.at(game.release_date.to_i).strftime('%m/%d/%Y')}", "Average GR Rating:   #{avg_rating} (based on #{reviews.count} ratings)", "Average IGDB Rating: #{game.igdb_rating.round(2)} (based on #{game.igdb_rating_count} ratings)"], user)
         router = display_options_menu(options, message)
         message = ["Sorry, invalid selection. Please choose again..."]
     end
@@ -120,14 +123,19 @@ def game_reviews(user, game, tracer=2)
     message = []
     # base options
     user == "guest" ? user_num = 0 : user_num = user.id
-    options = Review.where(["game_id == ? and user_id != ?", game.id, user_num]).limit(32).order(:id).map do |review|
+    reviews = Review.where(["game_id == ? and user_id != ?", game.id, user_num]).limit(32).order(:id)
+    options = reviews.map do |review|
         name = User.find(review.user_id).name
         name.length < 15 ? name = name + " " * (14 - name.length) : name = name[0,11] + "..."
         rat = review.rating.to_s
-        rat = rat + " " if rat.length < 2
+        until rat.length == 3
+            rat = " " + rat
+        end
         rev = review.review_text
-        rev = rev[0,$sp[:w] - 32] + "..." if rev.length > $sp[:w] - 29
-        [name + "  " + rat + "  " + rev, review.id * 100]
+        rev = rev[0,$sp[:w] - 34] + "..." if rev.length > $sp[:w] - 31
+        line = [name + " | " + rat + " | " + rev, review.id * 100]
+        line[0] = line[0] + " " * ($sp[:w] - line[0].length - 7) + "|\n" + " " * $sp[:l] + "|" + "-" * ($sp[:w] - 2) if reviews[-1] == review
+        line
     end
     options += [
         ["Previous Menu", tracer],
@@ -135,7 +143,7 @@ def game_reviews(user, game, tracer=2)
         ["Exit", 1]
     ]
     until router
-        display_menu_header(["'#{game.name}' reviews:", "      User:         1-10: Review:"], user)
+        display_menu_header(["'#{game.name}' reviews:", "", "      User:           1-100: Review:"], user)
         router = display_options_menu(options, message)
         message = ["Sorry, invalid selection. Please choose again..."]
     end

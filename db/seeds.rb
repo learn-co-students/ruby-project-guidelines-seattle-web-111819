@@ -17,27 +17,12 @@ require 'pry'
 # http = Net::HTTP.new('api-v3.igdb.com',443)
 # http.use_ssl = true
 # request = Net::HTTP::Post.new(URI('https://api-v3.igdb.com/games'), {'user-key' => "bea99e40326fc66d0145d65bff646876"})
-# request.body = 'fields name; sort id; limit 500;'
+# request.body = 'fields name, rating, rating_count, first_release_date; where rating_count > 200 & rating > 70; sort id; limit 500;'
 # games = JSON.parse(http.request(request).body)
+# games.each {|game| Game.find_or_create_by(name: game["name"], lowercase_name: game["name"].downcase, igdb_rating: game["rating"], release_date: game["first_release_date"], igdb_rating_count: game["rating_count"])}
 
 
-games = [{"id"=>1, "name"=>"Thief II: The Metal Age"},
-{"id"=>2, "name"=>"Thief: The Dark Project"},
-{"id"=>3, "name"=>"Thief: Deadly Shadows"},
-{"id"=>4, "name"=>"Thief"},
-{"id"=>5, "name"=>"Baldur's Gate"},
-{"id"=>6, "name"=>"Baldur's Gate II: Shadows Of Amn"},
-{"id"=>7, "name"=>"Jagged Alliance"},
-{"id"=>8, "name"=>"Jagged Alliance: Deadly Games"},
-{"id"=>9, "name"=>"Jagged Alliance 2"},
-{"id"=>10, "name"=>"Jade Empire: Special Edition"},
-{"id"=>11, "name"=>"Vampire: The Masquerade - Bloodlines"},
-{"id"=>12, "name"=>"Vampire: The Masquerade - Redemption"},
-{"id"=>13, "name"=>"Fallout"},
-{"id"=>14, "name"=>"Fallout 2"},
-{"id"=>15, "name"=>"Fallout 3"}]
-
-User.find_or_create_by(name: "Adam")
+User.find_or_create_by(name: "Antidisestablishmentarianism")
 User.find_or_create_by(name: "Bob")
 User.find_or_create_by(name: "Carla")
 User.find_or_create_by(name: "Delila")
@@ -52,30 +37,24 @@ User.find_or_create_by(name: "Lena")
 User.find_or_create_by(name: "Marv")
 User.find_or_create_by(name: "Nan")
 User.find_or_create_by(name: "Olaf")
-User.find_or_create_by(name: "Peterpiperpickedapeck")
+User.find_or_create_by(name: "Paul")
 
 
 
-Review.find_or_create_by(review_text: "Good!", rating: 10, user_id: 2, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me! I'm a long long long long long long long long long long long long long review", rating: 1, user_id: 16, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 1, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 3, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 4, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 5, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 6, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 7, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 9, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 10, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 11, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 12, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 13, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 14, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 15, game_id: 4)
+Review.find_or_create_by(user_id: 1, game_id: 3, rating: 100, review_text: "This game is the absolute best! I've spent about 200 hours playing this game so far and I haven't even taken a bathroom break! Which is weird, because I've had an awful lot of coffee... But whatever, it's amazing! That thing you do in the second level? EPIC! EPIC I TELL YOU!!! That other user, you know the one, he says this game sucks, but he has no idea what he's talking about! This game will be the game of the year! No, no, the game of the CENTURY!! Did I mention it was amazing? Clearly not enough, because it's SUPER DUPER AMAZE-BALLS! I think I may need to eat though. All I've had are cheese balls and Dew. LOTS of Dew. Like EPIC amounts of Dew. Enough to drown a horde of Nifleheim giants! Perhaps I should go befoior eiwaaaaaaaaaaa")
+Review.find_or_create_by(user_id: 2, game_id: 3, rating: 94, review_text: "I'm a long long long long long long long long long long long long long review. Don't delete me! I'm a long long long long long long long long long long long long long review. Don't delete me! I'm a long long long long long long long long long long long long long review.")
+Review.find_or_create_by(user_id: 3, game_id: 3, rating: 80, review_text: "Good!")
+Review.find_or_create_by(user_id: 4, game_id: 3, rating: 90, review_text: "Yeet!")
+Review.find_or_create_by(user_id: 5, game_id: 3, rating: 50, review_text: "Don't delete me!!")
+Review.find_or_create_by(user_id: 6, game_id: 3, rating: 50, review_text: "What?")
+Review.find_or_create_by(user_id: 7, game_id: 3, rating: 50, review_text: "Cool")
+Review.find_or_create_by(user_id: 9, game_id: 3, rating: 50, review_text: "Waste of time, in a good way")
+Review.find_or_create_by(user_id: 10, game_id: 3, rating: 50, review_text: "Yeet again!")
+Review.find_or_create_by(user_id: 11, game_id: 3, rating: 50, review_text: "Aw, CRUD")
+Review.find_or_create_by(user_id: 12, game_id: 3, rating: 50, review_text: "Nonsense")
+Review.find_or_create_by(user_id: 13, game_id: 3, rating: 50, review_text: "Simple")
+Review.find_or_create_by(user_id: 14, game_id: 3, rating: 50, review_text: "Yet another review")
+Review.find_or_create_by(user_id: 15, game_id: 3, rating: 50, review_text: " ")
+Review.find_or_create_by(user_id: 16, game_id: 3, rating: 10, review_text: " ")
 
-
-
-
-games.each do |game|
-    Game.find_or_create_by(name: game["name"], lowercase_name: game["name"].downcase)
-end
 

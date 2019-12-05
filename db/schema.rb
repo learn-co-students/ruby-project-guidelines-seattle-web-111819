@@ -10,11 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191205045355) do
+ActiveRecord::Schema.define(version: 20191205180857) do
 
   create_table "games", force: :cascade do |t|
-    t.string "name"
-    t.string "lowercase_name"
+    t.string  "name"
+    t.string  "lowercase_name"
+    t.float   "igdb_rating"
+    t.integer "igdb_rating_count"
+    t.string  "release_date"
   end
 
   create_table "reviews", force: :cascade do |t|

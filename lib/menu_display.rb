@@ -15,7 +15,14 @@ end
 # Validates and returns the input
 def display_options_menu(options, message)
     optnums = (1..options.count).map{ |i| i.to_s 36}
-    options.each_with_index {|opt, i| puts " " * $sp[:l] + "|  #{optnums[i]}) #{opt[0]}" + " " * ($sp[:w] - 7 - opt[0].size) + "|"}
+    options.each_with_index do |opt, i|
+        if opt[0].length > $sp[:w]
+            right_end = "|"
+        else
+            right_end = " " * ($sp[:w] - 7 - opt[0].size) + "|"
+        end
+        puts " " * $sp[:l] + "|  #{optnums[i]}) #{opt[0]}" + right_end
+    end
     puts " " * $sp[:l] + "-" * $sp[:w]
     puts "\n" * (4 - message.count)
     message.each {|line| puts " " * $sp[:l] + line}

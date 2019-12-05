@@ -1,5 +1,5 @@
 # menu spacing values global variable
-$sp = {t: 10, l: 20, w: 70}
+$sp = {t: 5, l: 10, w: 80}
 
 # Displays the menu header
 def display_menu_header(header, user="guest")
@@ -14,13 +14,15 @@ end
 # Displays the menu body for multi-option menus
 # Validates and returns the input
 def display_options_menu(options, message)
-    options.each_with_index {|opt, i| puts " " * $sp[:l] + "|  #{i + 1}) #{opt[0]}" + " " * ($sp[:w] - 7 - opt[0].size) + "|"}
+    optnums = (1..options.count).map{ |i| i.to_s 36}
+    options.each_with_index {|opt, i| puts " " * $sp[:l] + "|  #{optnums[i]}) #{opt[0]}" + " " * ($sp[:w] - 7 - opt[0].size) + "|"}
     puts " " * $sp[:l] + "-" * $sp[:w]
     puts "\n" * (4 - message.count)
     message.each {|line| puts " " * $sp[:l] + line}
-    print "\n" + " " * $sp[:l] + "Your selection (1-#{options.count})?  "
-    input = STDIN.getch.to_i
-    input > 0 && input <= options.count ? options[input - 1][1] : nil
+    print "\n" + " " * $sp[:l] + "Your selection (1-#{optnums[-1]})?  "
+    input = STDIN.getch
+    exit_game_reviews if input.ord == 27
+    optnums.include?(input) ? options[optnums.index(input)][1] : nil
 end
 
 # Displays the menu body for string requests
@@ -33,6 +35,7 @@ def display_string_menu(prompt, message)
 end
 
 # Displays the menu footer
+# Pauses the screen
 def display_footer(message)
     puts "\n\n"
     message.each {|line| puts " " * $sp[:l] + line}
@@ -40,5 +43,3 @@ def display_footer(message)
     STDIN.getch
     puts ""
 end
-
-

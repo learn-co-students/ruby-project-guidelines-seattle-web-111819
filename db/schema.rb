@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191203200359) do
+ActiveRecord::Schema.define(version: 20191205045355) do
 
   create_table "games", force: :cascade do |t|
     t.string "name"
+    t.string "lowercase_name"
   end
 
   create_table "reviews", force: :cascade do |t|

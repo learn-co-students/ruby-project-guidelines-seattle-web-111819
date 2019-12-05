@@ -45,13 +45,37 @@ User.find_or_create_by(name: "Ed")
 User.find_or_create_by(name: "Frank")
 User.find_or_create_by(name: "Grace")
 User.find_or_create_by(name: "Hanna")
+User.find_or_create_by(name: "Ivan")
+User.find_or_create_by(name: "Jana")
+User.find_or_create_by(name: "Klaus")
+User.find_or_create_by(name: "Lena")
+User.find_or_create_by(name: "Marv")
+User.find_or_create_by(name: "Nan")
+User.find_or_create_by(name: "Olaf")
+User.find_or_create_by(name: "Peterpiperpickedapeck")
+
+
 
 Review.find_or_create_by(review_text: "Good!", rating: 10, user_id: 2, game_id: 4)
-Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 8, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me! I'm a long long long long long long long long long long long long long review", rating: 1, user_id: 16, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 1, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 3, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 4, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 5, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 6, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 7, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 9, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 10, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 11, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 12, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 13, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 14, game_id: 4)
+Review.find_or_create_by(review_text: "Don't delete me!", rating: 1, user_id: 15, game_id: 4)
+
 
 
 
 games.each do |game|
-    Game.find_or_create_by(name: game["name"])
+    Game.find_or_create_by(name: game["name"], lowercase_name: game["name"].downcase)
 end
 

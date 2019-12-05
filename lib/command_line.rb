@@ -119,7 +119,8 @@ def game_reviews(user, game, tracer=2)
     router = nil
     message = []
     # base options
-    options = Review.where(game_id: game.id).limit(20).order(:id).map do |review|
+    user == "guest" ? user_num = 0 : user_num = user.id
+    options = Review.where(["game_id == ? and user_id != ?", game.id, user_num]).limit(32).order(:id).map do |review|
         name = User.find(review.user_id).name
         name.length < 15 ? name = name + " " * (14 - name.length) : name = name[0,11] + "..."
         rat = review.rating.to_s
@@ -138,9 +139,7 @@ def game_reviews(user, game, tracer=2)
         router = display_options_menu(options, message)
         message = ["Sorry, invalid selection. Please choose again..."]
     end
-
-
-
+    menu_routing(user, game, router, 9)
 end
 
 # (ROUTER 11): Update Review Menu

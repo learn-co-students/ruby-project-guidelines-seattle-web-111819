@@ -1,6 +1,19 @@
-# Read a Review
+# (ROUTER 19): Read a Review
 def read_review(user, game, review, tracer=2)
-
+    chopped = review.review_text.split(" ")
+    first = chopped.shift
+    formatted = chopped.reduce([first]) do |memo, word|
+        memo[-1].length + word.length < $sp[:w] - 6 ? memo[-1] = memo[-1] + " " + word : memo << word
+        memo
+    end
+    display_menu_header(["A Review of", "'#{game.name}'", "by #{User.find(review.user_id).name}"], user)
+    buffer = ($sp[:w] - 14)/2
+    puts " " * $sp[:l] + "|" + " " * buffer + "#{review.rating < 10 ? " " : ""}#{review.rating} out of 10" + " " * buffer + "|"
+    puts " " * $sp[:l] + "|" + " " * ($sp[:w] - 2) + "|"
+    formatted.each {|line| puts " " * $sp[:l] + "|  " + line + " " * ($sp[:w] - 4 - line.length) + "|"}
+    puts " " * $sp[:l] + "-" * $sp[:w]
+    display_footer([])
+    menu_routing(user, game, tracer)
 end
 
 # (ROUTER 10): Write a Review

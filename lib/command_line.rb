@@ -441,7 +441,7 @@ def self.view_all_venues
 end 
 
 def self.view_all_events_2(event)
-    if events = []
+    if event == []
         puts "No events"
     else
     event.all.each do |e|

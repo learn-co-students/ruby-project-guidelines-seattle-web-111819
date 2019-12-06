@@ -23,6 +23,7 @@ class Artist < ActiveRecord::Base
         puts "7) View all events by venue"
         puts "8) Delete event"
         puts "9) Return to #{artist.name}'s homepage"
+        puts "10) delete account"
         input = STDIN.gets.strip.to_i 
         if input == 1
             art.print_all_events
@@ -46,10 +47,31 @@ class Artist < ActiveRecord::Base
         elsif input == 9 
             system("clear")
             CommandLine.artist_profile(artist)
+        elsif input == 10 
+            system("clear")
+            art.delete_account(artist)
         else
             system("clear")
             puts "Invalid Command"
             self.my_events_menu(artist)
+        end 
+        
+    end 
+
+    def delete_account(artist)
+        puts "Are you sure you want to delete your account"
+        puts "Enter: yes or no"
+        input = STDIN.gets.strip
+        if input == "yes"
+            artist.destroy 
+        system("clear")
+        puts "account deleted"
+        CommandLine.welcome 
+        elsif input == "no"
+            system("clear")
+            CommandLine.artist_profile(artist)
+        else puts "invalid command"
+            delete_account(artist)
         end 
     end 
 

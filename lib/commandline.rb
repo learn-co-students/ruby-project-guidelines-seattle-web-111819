@@ -1,4 +1,5 @@
 
+
     system('clear')
 
     def get_user_method
@@ -18,7 +19,7 @@
       puts "     \\|//   \\|///  \\\|//  \\\|///     \|///    \\\|//    \\|//  \\\|//    " 
       puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
       puts "Hello!" 
-      puts "Welcome to your Community Gardens Assistant."
+      puts "Welcome to your Community Gardens App."
       puts "Please type your first name."
     end
 
@@ -35,6 +36,7 @@
     puts "Back to Main Menu? y/n"
             user_input = gets.strip
             if user_input = "y" 
+          system('clear')
           puts ""
           menu(current_user)
             else user_input = "n"
@@ -52,6 +54,7 @@
       "Exit"
     ]
     puts "[::MAIN MENU::]"
+    puts ""
     puts "Please choose an option below:"
     puts ""
       menu_options.each_with_index do |option, i|
@@ -94,8 +97,10 @@
           exit_garden
         else
         puts "[::TRY AGAIN::]"
+        puts ""
         puts "That's not an option. Please pick again."
         puts ""
+
         menu
         
       end
@@ -125,7 +130,7 @@
       # member = (member_id: Member.find_by(name: name).id) 
       # Plant.find_all_by(member)
       puts ""
-      puts "Your Plants:"
+      puts "[::YOUR PLANTS::]"
       puts ""
         users_plants = Plant.where(member_id: current_user.id)
 
@@ -167,6 +172,7 @@
       #Water your plants
       puts ""
       puts "[::WATER PLANTS::]"
+      puts ""
       puts "Which plant would you like to water? Select by plant name."
       puts ""
       view_plants(current_user)
@@ -225,6 +231,19 @@
       new_plant
 
       puts "Yay! Your new plant, #{plant_common_name} has been added!"
+
+      puts"           _ _         "
+      puts"         _{ ' }_       "
+      puts"        { `.!.` }      "
+      puts"        ',_/Y\_,'      "
+      puts"          {_,_}        "
+      puts"            |          "
+      puts"          (\|  /)      "
+      puts"           \| //       "
+      puts"            |//        "
+      puts"         \\ |/  //     "
+      puts"      ^^^^^^^^^^^^^^^  "
+
     end
 
 
@@ -237,6 +256,7 @@
       #Delete a plant
       puts ""
       puts "[::REMOVE PLANT::]"
+      puts ""
       puts "Which plant would you like to remove? Select by plant name."
       puts ""
       view_plants(current_user)
@@ -255,5 +275,7 @@
   #------ E X I T ---------------------------------------------
 
     def exit_garden
+      puts "[::BYE::]"
+      puts ""
       puts "Goodbye! Your plants will miss you."
     end

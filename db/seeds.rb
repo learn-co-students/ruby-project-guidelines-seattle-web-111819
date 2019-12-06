@@ -24,8 +24,3 @@ plant9 = Plant.create(common_name: "Tomato", member_id: 4, garden_id: 1, height:
 plant10 = Plant.create(common_name: "Rose", member_id: 5, garden_id: 2, height: 7.0)
 
 
-
-
-# plant.each do |plant|
-#   Plant.create(plant: plant[:common_name], owner: plant[:owner])
-# end

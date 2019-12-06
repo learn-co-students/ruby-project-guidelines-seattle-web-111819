@@ -21,7 +21,8 @@ class Artist < ActiveRecord::Base
         puts "5) Update an event"
         puts "6) Create an event"
         puts "7) View all events by venue"
-        puts "8) Return to #{artist.name}'s homepage"
+        puts "8) Delete event"
+        puts "9) Return to #{artist.name}'s homepage"
         input = STDIN.gets.strip.to_i 
         if input == 1
             art.print_all_events
@@ -40,6 +41,9 @@ class Artist < ActiveRecord::Base
             system("clear")
             art.find_event_by_venue 
         elsif input == 8 
+            system("clear")
+             
+        elsif input == 9 
             system("clear")
             CommandLine.artist_profile(artist)
         else
@@ -61,6 +65,19 @@ class Artist < ActiveRecord::Base
         e = Event.where(artist_id: self.id, venue_id: my_v.id)
         pretty_print_events(e)
         end 
+    end 
+
+    def find_event_by_venue
+        puts "enter venue name"
+        input = STDIN.gets.strip
+        v = input.titleize 
+        my_v = Venue.find_by(name: v)
+        if my_v == nil 
+            puts "No events at the venue"
+            anything_else
+        else 
+        e = Event.where(artist_id: self.id, venue_id: my_v.id)
+        pretty_print_events(e)
     end 
 
    
@@ -153,7 +170,16 @@ class Artist < ActiveRecord::Base
         puts "Artist: #{event_artist.name}"
         puts ""
         display_venue_info(event_venue)
+        puts "Do you want to delete the event?"
+        puts "type 'yes' or 'no'"
+        input = STDIN.gets.strip
+        if input == 'yes'
+            e.destroy
+            puts "You have deleted your event"
+            anything_else
+        else
         anything_else
+        end 
     end 
 
 

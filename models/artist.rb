@@ -194,6 +194,7 @@ class Artist < ActiveRecord::Base
         # elsif input == 2
         #     update_event_date(e)
         elsif input == 2
+            0
             Artist.my_events_menu(self)
         else 
             system("clear")

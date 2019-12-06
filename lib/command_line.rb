@@ -84,6 +84,12 @@ class CommandLine
             puts "incorrect password. You have #{count} more attempts"
             new_password = STDIN.gets.strip
             count -= 1
+            if count == 2 || count == 1 || count == 3
+                puts ""
+                puts "Forgot password?"
+                puts "password hint: #{user.password_hint}"
+                puts ""
+            end 
             if new_password == user.password
                CommandLine.artist_welcome(user)
                system("clear")

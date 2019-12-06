@@ -21,6 +21,7 @@ class Artist < ActiveRecord::Base
         puts "5) Update an event"
         puts "6) Create an event"
         puts "7) Return to #{artist.name}'s homepage"
+        puts "8) Return to #{artist.name}'s homepage"
         input = STDIN.gets.strip.to_i 
         if input == 1
             art.print_all_events
@@ -37,6 +38,9 @@ class Artist < ActiveRecord::Base
             art.create_event 
         elsif input == 7 
             system("clear")
+            art.find_event_by_venue 
+        elsif input == 8 
+            system("clear")
             CommandLine.artist_profile(artist)
         else
             system("clear")
@@ -44,6 +48,17 @@ class Artist < ActiveRecord::Base
             self.my_events_menu(artist)
         end 
     end 
+
+    def find_event_by_venue
+        puts "enter venue name"
+        input = STDIN.gets 
+        v = Venue.find_by(name: input)
+        e = Event.where(artist_id: self.id, venue_id: v.id)
+        pretty_print_events(e)
+    end 
+
+   
+
 
     def create_event 
         puts "Create New Event"

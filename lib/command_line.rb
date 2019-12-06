@@ -22,14 +22,18 @@ class CommandLine
         puts "--------------------"
         puts "1) Artist login"
         puts "2) Create new profile"
-        puts "3) Quit Easy Music Calendar"
+        puts "3) Use as fan"
+        puts "4) Quit Easy Music Calendar"
         input = STDIN.gets.strip
            if input.to_i == 1 
               artist_login
            elsif input.to_i == 2 
               create_new_profile_menu
-           elsif input.to_i == 3
-              exit_program
+            elsif input.to_i == 3 
+                system("clear")
+                fan_profile
+           elsif input.to_i == 4
+
            else 
               system("clear")
               puts "Sorry, I don't understand your selection"
@@ -115,9 +119,10 @@ class CommandLine
         elsif input == 2
             Artist.update_artist_info_menu(artist)
             system("clear")
-        # elsif input == 3
-        #     Artist.update_an_event(artist)
         elsif input == 3 
+            system("clear")
+            puts "You have successfully logged out!"
+            puts ""
             welcome 
         else 
             "That is not a valid command"
@@ -207,92 +212,131 @@ end
 def self.check_artist_username(username)
     Artist.where(username: username)
 end 
+def self.venue_ask
+    puts "Enter a venue name"
+    input = STDIN.gets.strip
+    inp = input.titleize 
+    v = Venue.find_by(name: inp)
+    if v == nil 
+        puts "cannot find that venue"
+        self.fan_profile
+    else 
+    e = Event.where(venue_id: v.id)
+    view_all_events_2(e)
+    end 
+end 
+  
+def self.display_venues(v)
+    puts "- Name :#{v.name}"
+    puts "- Street address:#{v.street_address}"
+    puts "- City: #{v.city}"
+    puts "- Zipcode:#{v.zip_code}"
+    puts "- Capacity: #{v.capacity}"
+    self.fan_profile
+end 
+
+def self.artist_ask
+    puts "Enter an artist name"
+    input = STDIN.gets.strip
+    inp = input.titleize 
+    a = Artist.find_by(name: inp)
+    if a == nil 
+        puts "cannot find that artist"
+        self.fan_profile
+    else 
+    e = Event.where(artist_id: a.id)
+    view_all_events_2(e)
+    end 
+end 
+
+def self.display_artist(a)
+    puts "- Name :#{a.name}"
+    puts "- Genre:#{a.genre}"
+    self.fan_profile
+end 
+
+def self.view_all_artists
+    Artist.all.each do |a|
+        puts ""
+        puts "- #{a.name}"
+    end 
+    puts " enter any key"
+    input = STDIN.gets.strip
+    self.fan_profile
+end 
+
+def self.view_all_venues
+    Venue.all.each do |v|
+        puts ""
+        puts ""
+        puts "- Name :#{v.name}"
+        puts "----------------------------------"
+    puts "- Street address:#{v.street_address}"
+    puts "- City: #{v.city}"
+    puts "- Zipcode:#{v.zip_code}"
+    puts "- Capacity: #{v.capacity}"
+    end 
+    puts " enter any key"
+    input = STDIN.gets.strip
+    system("clear")
+    self.fan_profile
+end 
+
+def self.view_all_events_2(event)
+    event.all.each do |e|
+        v = Venue.find(e.venue_id)
+        a = Artist.find(e.artist_id)
+        puts ""
+        puts "================================="
+        puts "- Artist: #{a.name}"
+        puts "- Genre: #{a.genre}"
+        puts "---------------------------------"
+        puts "- Date: #{e.date} (yyyy-mm-dd)"
+        puts "- Venue :#{v.name}"
+        puts "---------------------------------"
+        puts "- Street address:#{v.street_address}"
+        puts "- City: #{v.city}"
+        puts "- Zipcode:#{v.zip_code}"
+        puts "- Capacity: #{v.capacity}"
+    end 
+    puts " enter any key"
+    input = STDIN.gets.strip
+    system("clear")
+    self.fan_profile
+end 
 
 
+def self.fan_profile
+    puts "Welcome"
+    puts "1) View all events at a venue"
+    puts "2) View all events for artist"
+    puts "3) View all artitst"
+    puts "4) View all venues"
+    puts "5) Return to start"
+    input = STDIN.gets.strip.to_i
+    if input == 1
+        system("clear")
+        CommandLine.venue_ask
+    elsif input == 2
+        system("clear")
+        artist_ask
+    elsif input == 3
+        system("clear")
+        view_all_artists
+    elsif input == 4
+        system("clear")
+        view_all_venues
+    elsif input == 5
+        system("clear")
+        self.welcome
+    else 
+        system("clear")
+        puts "Invalid Command"
+        self.fan_profile
+    end 
+    
+end 
 
-# #from welcome -> sends to creates new artist or new venue
-# def create_new_profile
-#     puts "1) create new venue"
-#     puts "2) create new artist" 
-#     input = gets.strip.to_i 
-#     if input == 1 
-#         Venue.create_new_profile
-#     elsif input == 2 
-#         Artist.create_new_profile 
-#     else 
-#         puts "I do not understand that command"
-        
-#     end 
-# end 
-
-# def self.artist_welcome(artist_id)
-
-
-# end 
-
-# def fan_search_for_artist
-#     puts "enter the artist name" 
-#     artist_name = gets.strip
-#     my_artist = Artist.find_an_artist(artist_name)
-# end 
-
-
-# def use_existing_venue
-#     Venue.find_a_venue
-# end 
-
-# def create_new_venue
-# end 
-
-# def fan_of_music
-#     puts "Would you like to:"
-#     puts "1) View all events"
-#     puts "2) View all upcoming events"
-#     puts "3) View all past events"
-#     puts "4) view events by venue"
-#     puts "5) view events by artist"
-#     puts "5) view events by zip code" 
-#     puts " Go back to the start"
-# end 
-
-# def day_of_event
-#     puts "enter the year of the event: format as 'yyyy'"
-#     year = STDIN.gets.strip
-#     if (year.to_i.is_a? Integer) == false || year.size != 4
-#         puts "please enter a valid year:"
-#         puts "example: 2019"
-#         day_of_event
-#     else 
-#         month = self.find_month
-#         day = self.find_day
-#     end  
-#     date = "#{year.to_i}-#{month.to_i}-#{day.to_i}" 
-#     date 
-# end 
-
-# def find_month
-#     puts "enter month of the event: format as 'mm'"
-#     month = STDIN.gets.strip
-#     if (month.to_i.is_a? Integer) == false || month.to_i > 12 || month.to_i < 1
-#         puts "please enter a valid month:"
-#         puts "example: 01"
-#         find_month
-#     else 
-#         month
-#     end 
-# end 
-
-# def find_day 
-#     puts "enter day of the event: format as 'dd'"
-#         day = STDIN.gets.strip
-#     if (day.to_i.is_a? Integer) == false || day.to_i > 31 || day.to_i < 1
-#         puts "please enter a valid day:"
-#         puts "example: 01"
-#         find_day
-#     else 
-#         day 
-#     end 
-# end 
 
  end 
 

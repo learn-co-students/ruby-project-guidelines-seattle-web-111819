@@ -182,7 +182,7 @@ class Artist < ActiveRecord::Base
 
     def update_event
         e = locate_event
-        puts "Update event"
+        puts "Event Found!"
         puts "================="
         puts ""
         puts "1) Change venue"
@@ -194,7 +194,7 @@ class Artist < ActiveRecord::Base
         # elsif input == 2
         #     update_event_date(e)
         elsif input == 2
-            Artist.my_events_menu 
+            Artist.my_events_menu(self)
         else 
             system("clear")
             puts "Invalid Command"
@@ -210,6 +210,7 @@ class Artist < ActiveRecord::Base
         if searched != nil 
             e.venue_id = searched.id 
             e.save 
+            system("clear")
             puts "Successful!"
             CommandLine.artist_profile(self)
         else 

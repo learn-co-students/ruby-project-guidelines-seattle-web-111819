@@ -4,12 +4,10 @@
 
     def get_user_method
       user_name = gets.strip.downcase
-      if current_person = Member.all.select {|member| member.name == user_name}
-          return current_person[0]
-        else
-          puts "We do not have a member with that name, please try again."
-          get_user_method
-        end
+      current_person = Member.all.select {|member| member.name == user_name}
+      current_person[0]
+            #puts "We do not have a member with that name, please try again."
+            #back_to_main
     end
 
     def say_hello

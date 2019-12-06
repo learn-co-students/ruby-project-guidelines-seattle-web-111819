@@ -1,6 +1,8 @@
 # menu spacing values global variable
 $sp = {t: 5, l: 10, w: 80}
 
+
+
 # Displays the menu header
 def display_menu_header(header, user="guest")
     user == "guest" ? username = "User: guest" : username = "User: " + user.name
@@ -10,6 +12,8 @@ def display_menu_header(header, user="guest")
     header.each {|line| puts " " * $sp[:l] + line}
     puts " " * $sp[:l] + "-" * $sp[:w]
 end
+
+
 
 # Displays the menu body for multi-option menus
 # Validates and returns the input
@@ -32,6 +36,8 @@ def display_options_menu(options, message)
     optnums.include?(input) ? options[optnums.index(input)][1] : nil
 end
 
+
+
 # Displays the menu body for string requests
 # Returns the input
 def display_string_menu(prompt, message)
@@ -40,6 +46,8 @@ def display_string_menu(prompt, message)
     prompt.each {|line| print "\n" + " " * $sp[:l] + line}
     input = gets.strip
 end
+
+
 
 # Displays the menu footer
 # Pauses the screen

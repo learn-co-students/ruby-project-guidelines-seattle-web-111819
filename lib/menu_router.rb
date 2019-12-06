@@ -19,6 +19,5 @@ def menu_routing(user, game, router, tracer=2)
     update_review_rating(user, game, tracer) if router == 16
     update_review_text(user, game, tracer) if router == 17
     delete_review(user, game, tracer) if router == 18
-    # read_review(user, game, review, tracer) if router == 19
     read_review(user, game, Review.find(router / 100), tracer) if router > 99
 end

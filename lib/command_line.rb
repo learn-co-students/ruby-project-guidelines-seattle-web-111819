@@ -1,27 +1,43 @@
 # Program start
 def run
+    system('clear')
+    graphic_welcome
+    graphic_bottom
+    print "\n" + " " * 40 + "Press any key to continue... "
+    STDIN.getch
+    puts ""
     main_menu
 end
 
-# (ROUTER 2): The Main Menu
+
+
+# (ROUTER 2):
+# The Main Menu
 def main_menu(user="guest")
     router = nil
     message = []
     # base options
     options = [
+        ["Continue as a Guest", 8],
         ["Log In", 3],
         ["Create Account", 5],
-        ["Continue as a Guest", 8],
         ["Select a Game", 8],
-        ["My Account", 6],
+        ["My Reviewed Games", 13],
         ["Log Out", 4],
+        ["My Account", 6],
         ["Exit", 1]
     ]
     # removing options based on status
     if user == "guest"
+        options.delete_at(6)
         options.delete_at(5)
         options.delete_at(4)
         options.delete_at(3)
+    elsif Review.where(user_id: user.id).count == 0
+        options.delete_at(4)
+        options.delete_at(2)
+        options.delete_at(1)
+        options.delete_at(0)
     else
         options.delete_at(2)
         options.delete_at(1)
@@ -36,23 +52,21 @@ def main_menu(user="guest")
     menu_routing(user, "", router)
 end
 
-# (ROUTER 6): My Account Menu
+
+
+# (ROUTER 6):
+# My Account Menu
 def my_account(user)
     router = nil
     message = []
     # base options
     options = [
         ["Change Name", 12],
-        ["My Reviews", 13],
         ["Delete Account", 7],
         ["Log Out", 4],
         ["Main Menu", 2],
         ["Exit", 1]
     ]
-    # removing options based on status
-    if Review.where(user_id: user.id).count == 0
-        options.delete_at(1)
-    end
     # display loop until validated choice
     until router
         display_menu_header(["My Account:"], user)
@@ -62,7 +76,10 @@ def my_account(user)
     menu_routing(user, "", router)
 end
 
-# (ROUTER 14): User finds a game by the title
+
+
+# (ROUTER 14):
+# User finds a game by the title
 def choose_game(user)
     user == "guest" ? username = "guest" : username = user.name
     entry = nil
@@ -75,37 +92,51 @@ def choose_game(user)
         main_menu(user) if entry.downcase == "main"
         game = Game.find_by(lowercase_name: entry.downcase)
         game = Game.where(["name like ?", "%#{entry.downcase}%"]).limit(1)[0] if !game
-        entry = nil if !game
+        entry = nil if !game || entry.size < 3
     end
     display_footer(["Found an entry for #{game.name}!"])
     game_menu(user, game)
 end
 
-# (ROUTER 15): Options menu for the chosen game
+
+
+# (ROUTER 15):
+# Options menu for the chosen game
 def game_menu(user, game, tracer=2)
     reviews = Review.where(game_id: game.id)
     avg_rating = reviews.count == 0 ? " --- " : (reviews.sum(:rating).to_f / reviews.count).round(2)
+    myrev = nil
+    myrev = reviews.find_by(user_id: user.id) if user != "guest"
+    myrev ? myrev = myrev.id * 100 : myrev = 2
     router = nil
     message = []
     # base options
     options = [
         ["Read Reviews", 9],
         ["Write a Review", 10],
-        ["Update Your Review", 11],
+        ["Read My Review", myrev],
+        ["Update My Review", 11],
+        ["My Reviewed Games", 13],
         ["Choose Another Game", 8],
         ["Log In", 3],
+        ["Previous Menu", tracer],
         ["Main Menu", 2],
         ["Exit", 1]
     ]
     # removing options based on status
     if user == "guest"
+        options.delete_at(4)
+        options.delete_at(3)
         options.delete_at(2)
         options.delete_at(1)
-    elsif Review.find_by(user_id: user.id)
-        options.delete_at(4)
+    elsif myrev > 99
+        options.delete_at(6)
         options.delete_at(1)
-    else
+    elsif Review.find_by(user_id: user.id) == []
         options.delete_at(4)
+    else
+        options.delete_at(6)
+        options.delete_at(3)
         options.delete_at(2)
     end
     options.delete_at(0) if reviews.count == 0
@@ -118,7 +149,10 @@ def game_menu(user, game, tracer=2)
     menu_routing(user, game, router, 15)
 end
 
-# (ROUTER 9): List the Reviews for a Game
+
+
+# (ROUTER 9):
+# List the Reviews for a Game
 def game_reviews(user, game, tracer=2)
     router = nil
     message = []
@@ -151,7 +185,10 @@ def game_reviews(user, game, tracer=2)
     menu_routing(user, game, router, 9)
 end
 
-# (ROUTER 13): List the User's Reviews
+
+
+# (ROUTER 13):
+# List the User's Reviewed Games
 def my_reviews(user, tracer=2)
     router = nil
     message = []
@@ -159,13 +196,13 @@ def my_reviews(user, tracer=2)
     reviews = Review.where(user_id: user.id).limit(32).order(:id)
     options = reviews.map do |review|
         game_name = Game.find(review.game_id).name
-        game_name.length < 25 ? game_name = game_name + " " * (24 - game_name.length) : game_name = game_name[0,21] + "..."
+        game_name.length < 35 ? game_name = game_name + " " * (34 - game_name.length) : game_name = game_name[0,31] + "..."
         rat = review.rating.to_s
         until rat.length == 3
             rat = " " + rat
         end
         rev = review.review_text
-        rev = rev[0,$sp[:w] - 44] + "..." if rev.length > $sp[:w] - 41
+        rev = rev[0,$sp[:w] - 54] + "..." if rev.length > $sp[:w] - 51
         line = [game_name + " | " + rat + " | " + rev, review.id * 100]
         line[0] = line[0] + " " * ($sp[:w] - line[0].length - 7) + "|\n" + " " * $sp[:l] + "|" + "-" * ($sp[:w] - 2) if reviews[-1] == review
         line
@@ -176,22 +213,26 @@ def my_reviews(user, tracer=2)
         ["Exit", 1]
     ]
     until router
-        display_menu_header(["Your reviews:", "", "      Game:                     1-100: Review:"], user)
+        display_menu_header(["Your reviewed games:", "", "      Game:                               1-100: Review:"], user)
         router = display_options_menu(options, message)
         message = ["Sorry, invalid selection. Please choose again..."]
     end
+    menu_routing(user, Game.find(Review.find(router / 100).game_id), 15, 13) if router > 99
     menu_routing(user, nil, router, 13)
 end
 
-# (ROUTER 11): Update Review Menu
+
+
+# (ROUTER 11):
+# Update Review Menu
 def update_review(user, game, tracer=2)
     router = nil
     message = []
     # base options
     options = [
-        ["Update Your Review Rating", 16],
-        ["Update Your Review Text", 17],
-        ["Delete Your Review", 18],
+        ["Update My Review Rating", 16],
+        ["Update My Review Text", 17],
+        ["Delete My Review", 18],
         ["Previous Menu", tracer],
         ["Main Menu", 2],
         ["Exit", 1]
@@ -205,9 +246,76 @@ def update_review(user, game, tracer=2)
     menu_routing(user, game, router, tracer)
 end
 
-# (ROUTER 1): Get me out of here!
+
+
+# (ROUTER 1):
+# Get me out of here!
 def exit_game_reviews
-    display_footer(["Thanks for using Game Reviews!", "Goodbye!", "", ""])
+    system('clear')
+    graphic_thanks
+    graphic_bottom
+    print "\n" + " " * 40 + "Press any key to continue... "
+    STDIN.getch
+    puts ""
     system('clear')
     exit
+end
+
+
+
+def graphic_welcome
+    puts "-------------------------------------------------------------------------------------------------------------"
+    puts "|                    __        __     _                                   _                                 |"
+    puts "|                    \\ \\      / /___ | |  ___  ___   _ __ ___    ___     | |_  ___                          |"
+    puts "|                     \\ \\ /\\ / // _ \\| | / __|/ _ \\ | '_ ` _ \\  / _ \\    | __|/ _ \\                         |"
+    puts "|                      \\ V  V /|  __/| || (__| (_) || | | | | ||  __/    | |_| (_) |                        |"
+    puts "|                       \\_/\\_/  \\___||_| \\___|\\___/ |_| |_| |_| \\___|     \\__|\\___/                         |"
+    puts "|                                                                                                           |"
+    puts "|                                                                                                           |"
+end
+
+def graphic_thanks
+    puts "-------------------------------------------------------------------------------------------------------------"
+    puts "|       _____  _                    _               __                               _                      |"
+    puts "|      |_   _|| |__    __ _  _ __  | | __ ___      / _|  ___   _ __      _   _  ___ (_) _ __    __ _        |"
+    puts "|        | |  | '_ \\  / _` || '_ \\ | |/ // __|    | |_  / _ \\ | '__|    | | | |/ __|| || '_ \\  / _` |       |"
+    puts "|        | |  | | | || (_| || | | ||   < \\__ \\    |  _|| (_) || |       | |_| |\\__ \\| || | | || (_| |       |"
+    puts "|        |_|  |_| |_| \\__,_||_| |_||_|\\_\\|___/    |_|   \\___/ |_|        \\__,_||___/|_||_| |_| \\__, |       |"
+    puts "|                                                                                              |___/        |"
+    puts "|                                                                                                           |"
+end
+
+def graphic_bottom
+    puts "|           ________                           __________               .__                                 |"
+    puts "|          /  _____/ _____     _____    ____   \\______   \\  ____ ___  __|__|  ____ __  _  __ ______         |"
+    puts "|         /   \\  ___ \\__  \\   /     \\ _/ __ \\   |       _/_/ __ \\\\  \\/ /|  |_/ __ \\\\ \\/ \\/ //  ___/         |"
+    puts "|         \\    \\_\\  \\ / __ \\_|  Y Y  \\\\  ___/   |    |   \\\\  ___/ \\   / |  |\\  ___/ \\     / \\___ \\          |"
+    puts "|          \\______  /(____  /|__|_|  / \\___  >  |____|_  / \\___  > \\_/  |__| \\___  > \\/\\_/ /____  >         |"
+    puts "|                 \\/      \\/       \\/      \\/          \\/      \\/                \\/             \\/          |"
+    puts "|                                                                                                           |"
+    puts "|                         .:+oyhhddddddddddddddddddddddddddddddddddddddddddddhyso/-`                        |"
+    puts "|                     .+ymMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMmy/.                    |"
+    puts "|                  .odMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMd+`                 |"
+    puts "|                .yMMMMMMMMNhs+/:-------------------------------------------::/+sdNMMMMMMMNo`               |"
+    puts "|              `oMMMMMMMd+.                                                       `-omMMMMMMN+`             |"
+    puts "|             .dMMMMMMy-                                                              -hMMMMMMh`            |"
+    puts "|            -NMMMMMd-         :+ooo+`                                   ./++-          :mMMMMMm.           |"
+    puts "|           .mMMMMMs`         .MMMMMMs                                  /MMMMMs          `hMMMMMd`          |"
+    puts "|           yMMMMMy           .MMMMMMs                                  yMMMMMm           `dMMMMMo          |"
+    puts "|          .MMMMMN`      .....:MMMMMMy.....`                       `..  `odmms.  `.`       -MMMMMN`         |"
+    puts "|          +MMMMMy      yMMMMMMMMMMMMMMMMMMN.                    `sNMMNo`      /mMMMh.      dMMMMM-         |"
+    puts "|          oMMMMMo      mMMMMMMMMMMMMMMMMMMM:                    /MMMMMM-     `NMMMMMy      yMMMMM:         |"
+    puts "|          +MMMMMs      hMMMMMMMMMMMMMMMMMMM-                    `hMMMMs`      +NMMMd-      dMMMMM-         |"
+    puts "|          .MMMMMN`     `-----/MMMMMMy-----.                       `--` `+hdho` `--.       .MMMMMN`         |"
+    puts "|           hMMMMMs           .MMMMMMs                                  sMMMMMd           `hMMMMMo          |"
+    puts "|           .NMMMMMo          .MMMMMMs                                  +MMMMMy          `yMMMMMm`          |"
+    puts "|            :NMMMMMy.         /sssso.        `/++++++++++++++:          -oso:          .dMMMMMm.           |"
+    puts "|             -mMMMMMNo`                    `:dMMMMMMMMMMMMMMMMh-                     .sMMMMMMd.            |"
+    puts "|              `yMMMMMMMy/`              `-omMMMMMMMMMMMMMMMMMMMMdo-               .+hMMMMMMMo`             |"
+    puts "|                -hMMMMMMMMdy+/-....-:+shNMMMMMMMmsoooooooosNMMMMMMMNho/:-...-:/oymMMMMMMMMy.               |"
+    puts "|                  -sNMMMMMMMMMMMMMMMMMMMMMMMMMh/`          `+dMMMMMMMMMMMMMMMMMMMMMMMMMmo.                 |"
+    puts "|                    `:odMMMMMMMMMMMMMMMMMMmy/`                .+yNMMMMMMMMMMMMMMMMMNho-                    |"
+    puts "|                        `-/oyhhhhhhhhys+:`                        .:+syhhhhhhhhso/-`                       |"
+    puts "|                                                                                                           |"
+    puts "-------------------------------------------------------------------------------------------------------------"
 end

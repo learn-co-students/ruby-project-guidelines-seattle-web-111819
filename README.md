@@ -11,5 +11,6 @@
       - update event venue for future event
       - change account setting (password, username, etc.)
       - looks up past, future, and all events 
+      - look up your events by venue  
 
 

@@ -1,10 +1,10 @@
 # class CommandLine
-
+require 'lolcat'
 require 'colorize'
 require 'colorized_string'
 
     def get
-    gets.strip
+        gets.strip
     end
         
     def s_help(num)
@@ -15,6 +15,7 @@ require 'colorized_string'
 
 def ascii_art
     s_help(5)
+
 puts     "____________________________________________________".colorize(:cyan)
 puts    "|____________________________________________________|".colorize(:cyan)
 puts    "| __     __   ____   ___ ||  ____    ____     _  __  |".colorize(:cyan)
@@ -46,8 +47,9 @@ puts   " |___\_/   /________//   ________         /  / ||_|_|_|".colorize(:cyan)
 puts   " |___ /   (|________/   |\_______\       /  /| |______|".colorize(:cyan)
 puts    "    /                  \|________)     /  / | |".colorize(:cyan)  
 puts    "------------------------------------------------".colorize(:cyan)
-
-puts   "~*~*~*~*~*~~*WELCOME TO HARRY POTTER READS*~*~*~*~~*~*~*~".colorize(:green)
+# lolcat
+# puts   "~*~*~*~*~*~~*WELCOME TO HARRY POTTER READS*~*~*~*~~*~*~*~"
+lolcat_harry_potter_reads
 pause
 s_help(5)
   
@@ -81,7 +83,7 @@ end
     # menu_screen
 
     def create_user_name
-        puts "Please enter your username:".colorize(:light_blue)
+        lolcat("Please enter your username:")
         name = get.gsub(/[^a-z]/i, '').downcase.capitalize
         new_user = User.find_or_create_by(name: name)
         s_help(5)
@@ -127,7 +129,7 @@ end
     def make_new_reviews
         #take in user instance
         #take in book instance
-        puts "Please enter your username".colorize(:blue).bold
+        puts "Please enter your username"
         username = get.gsub(/[^a-z]/i, '').downcase.capitalize
         user = User.find_by(name: username).id
         # binding.pry
@@ -177,7 +179,7 @@ end
         current_user = User.where(name: name)
         user_reviews = Review.where(user_id: current_user[0].id)
         user_reviews.each {|review| puts "Review #:#{review.id}. #{review.message}".colorize(:light_green)}
-        
+
         # Review.all.each {|review| puts "#{review.id}. #{review.message}"}
         
         # user_review_instance = Review.all.each{|review| review.user_id == current_user}
@@ -193,20 +195,27 @@ end
         puts "Please enter the review number that you want to delete"
         review_number = get
         review = Review.find_by(id: review_number)
+        if review == nil
+            puts "That review does not exist! D:"
+        else
         # binding.pry
         review.destroy
         # binding.pry
-        
+        end
     end
     def update_review
         puts "Please enter the review number that you want to update"
         review_number = get
         review = Review.find_by(id: review_number)
         # binding.pry
-        puts "Please type up an update review for this review"
-        u_message = get
         # binding.pry
-        review.update(message: u_message)
+        if review == nil
+            puts "That review does not exist! D:"
+        else
+            puts "Please type up an update review for this review"
+            u_message = get
+            review.update(message: u_message)
+        end
         # binding.pry
     end
     def pause 
@@ -214,14 +223,20 @@ end
         STDIN.getch
     end
     def exit_run
-        puts "Goodbye!"
-    puts "     __"
-    puts "   _|==|_ " 
-    puts "    ('')___/"
-    puts ">--(`^^')"
-    puts "  (`^'^'`)"
-    puts "  `======' "
-
+        s_help(2)
+        lolcat("Goodbye!")
+    puts "     __".colorize(:magenta).bold
+    puts "   _|==|_ " .colorize(:magenta).bold
+    puts "    ('')___/".colorize(:magenta).bold
+    puts ">--(`^^')".colorize(:magenta).bold
+    puts "  (`^'^'`)".colorize(:magenta).bold
+    puts "  `======' ".colorize(:magenta).bold
+    end
+    def lolcat_harry_potter_reads
+        system "echo ~*~*~*~*~*~~*WELCOME TO HARRY POTTER READS*~*~*~*~~*~*~*~ | lolcat -a -d 30"
+    end
+    def lolcat(text)
+        system "echo #{text} | lolcat -a -d 25"
     end
 
 
@@ -230,7 +245,7 @@ end
         menu_screen
         command = ""
         
-        puts "Please enter command number or 'exit':"
+        lolcat("Please enter command number or 'exit':")
         command = get.strip.to_s
         
         case command

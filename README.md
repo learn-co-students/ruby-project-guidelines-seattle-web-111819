@@ -22,6 +22,10 @@
       - view all events by artist
       - view all events by venue 
 
+      # as a venue
+      - create a new venue
+      - update venue information 
+
 5. 
       - I didn't have time to make a login for venues so there is no way to make a venue in the program
       - Therefore you can currently only make new events as an artist with existing venues 

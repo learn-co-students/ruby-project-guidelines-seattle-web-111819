@@ -296,7 +296,7 @@ def self.view_all_events_2(event)
         puts "---------------------------------"
         puts "- Street address:#{v.street_address}"
         puts "- City: #{v.city}"
-        puts "- Zipcode:#{v.zip_code}"
+        puts "- Zipcode: #{v.zip_code}"
         puts "- Capacity: #{v.capacity}"
     end 
     puts " enter any key"
@@ -310,7 +310,7 @@ def self.fan_profile
     puts "Welcome"
     puts "1) View all events at a venue"
     puts "2) View all events for artist"
-    puts "3) View all artitst"
+    puts "3) View all artists"
     puts "4) View all venues"
     puts "5) Return to start"
     input = STDIN.gets.strip.to_i

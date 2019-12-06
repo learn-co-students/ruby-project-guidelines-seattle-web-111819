@@ -208,13 +208,11 @@ class Artist < ActiveRecord::Base
     end 
 
     def search_for_venue_by_name(venue_name)
-        binding.pry 
         v = venue_name.titleize 
         my_venue = Venue.find_by(name: v)
         if my_venue == nil 
             not_a_venue_message
         end 
-        binding.pry 
         my_venue
     end 
 
@@ -296,7 +294,9 @@ class Artist < ActiveRecord::Base
         #print_event_info(event)
         else 
             puts "There is no record of that event"
-            CommandLine.artist_profile(self)
+            puts "press any key to continue"
+            input = STDIN.gets.strip
+            Artist.my_events_menu(self)
         end 
     end 
 

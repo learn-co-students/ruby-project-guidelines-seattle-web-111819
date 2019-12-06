@@ -118,7 +118,7 @@ class CommandLine
         # elsif input == 3
         #     Artist.update_an_event(artist)
         elsif input == 3 
-            welcome("clear")
+            welcome 
         else 
             "That is not a valid command"
             artist_profile(artist)

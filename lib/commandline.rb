@@ -3,9 +3,13 @@
     system('clear')
 
     def get_user_method
-      user_name = gets.strip
-      current_person = Member.all.select {|member| member.name == user_name}
-      return current_person[0]
+      user_name = gets.strip.downcase
+      if current_person = Member.all.select {|member| member.name == user_name}
+          return current_person[0]
+        else
+          puts "We do not have a member with that name, please try again."
+          get_user_method
+        end
     end
 
     def say_hello
@@ -31,6 +35,9 @@
         puts ""
 
     end  
+
+
+#----- M E N U  M E T H O D S --------------------------------------------------------------
 
     def back_to_main(current_user)
     puts "Back to Main Menu? y/n"
@@ -96,12 +103,13 @@
         when "6"
           exit_garden
         else
+        
         puts "[::TRY AGAIN::]"
         puts ""
         puts "That's not an option. Please pick again."
         puts ""
 
-        menu
+        menu(current_user)
         
       end
     end
@@ -122,6 +130,7 @@
       puts ""
       end
     end
+
 
     def view_plants(current_user)
       #View your current list of your plants and their locations
@@ -177,7 +186,7 @@
       puts ""
       view_plants(current_user)
 
-      plant_common_name = gets.strip
+      plant_common_name = gets.strip.downcase
 
       #user selects which plant
       desired_plant = get_plant_by_name(current_user, plant_common_name)
@@ -232,6 +241,7 @@
 
       puts "Yay! Your new plant, #{plant_common_name} has been added!"
 
+      puts ""
       puts"           _ _         "
       puts"         _{ ' }_       "
       puts"        { `.!.` }      "
@@ -275,7 +285,8 @@
   #------ E X I T ---------------------------------------------
 
     def exit_garden
-      puts "[::BYE::]"
+      system('clear')
+      puts "[::EXIT::]"
       puts ""
       puts "Goodbye! Your plants will miss you."
     end

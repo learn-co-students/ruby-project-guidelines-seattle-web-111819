@@ -15,6 +15,9 @@ ActiveRecord::Schema.define(version: 2019_12_03_174539) do
   create_table "artists", force: :cascade do |t|
     t.string "name"
     t.string "genre"
+    t.string "password"
+    t.string "password_hint"
+    t.string "username"
   end
 
   create_table "events", force: :cascade do |t|
@@ -29,6 +32,9 @@ ActiveRecord::Schema.define(version: 2019_12_03_174539) do
     t.string "city"
     t.integer "zip_code"
     t.integer "capacity"
+    t.string "password"
+    t.string "password_hint"
+    t.string "username"
   end
 
 end

@@ -5,7 +5,10 @@ class CreateVenues < ActiveRecord::Migration[5.2]
       t.string :street_address
       t.string :city 
       t.integer :zip_code
-      t.integer :capacity 
+      t.integer :capacity
+      t.string :password
+      t.string :password_hint 
+      t.string :username
     end 
   end
 end

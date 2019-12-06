@@ -2,6 +2,108 @@ class Venue < ActiveRecord::Base
     has_many :events 
     has_many :artists, through: :events 
 
+    def self.update_account(venue)
+        v = venue 
+        puts "1) Update username"
+        puts "2) Update name"
+        puts "3) Update password"
+        puts "4) Update password hint"
+        puts "5) Update street address"
+        puts "6) Update city"
+        puts "7) Update zipcode"
+        puts "8) Venue info"
+        puts "9) Return to Homepage"
+        input = STDIN.gets.strip.to_i
+        update_info(input, v)
+    end 
+
+    def self.update_info(input, v)
+        if input == 1
+            att = "username"
+            att_value = v.username
+            up_next(input, v, att, att_value) 
+        elsif input == 2
+            att = "Venue name"
+            att_value = v.name 
+            up_next(input, v, att, att_value)
+        elsif input == 3
+            att = "password"
+            att_value = v.password
+            up_next(input, v, att, att_value)
+        elsif input == 4
+            att = "password hint"
+            att_value = v.password_hint
+            up_next(input, v, att, att_value)
+        elsif input == 5
+            att = "street adresss"
+            att_value = v.street_address
+            up_next(input, v, att, att_value)
+        elsif input == 6
+            att = "City"
+            att_value = v.city
+            up_next(input, v, att, att_value)
+        elsif input == 7
+            att = "Zip code"
+            att_value = v.zip_code
+            up_next(input, v, att, att_value)
+        elsif input == 8
+            venue_information(v)
+            up_next(input, v, att, att_value)
+        elsif input == 9
+            CommandLine.venue_profile(v)
+        else 
+            system("clear")
+            puts "Invalid Command"
+            update_account(v)
+        end 
+
+    end 
+
+    def self.up_next(input, v, att, att_value)
+        puts "Your current #{att} is: #{att_value}"
+        puts "enter new #{att}"
+        input_2 = STDIN.gets.strip
+        if  input == 1 
+            v.username = input_2
+            v.save 
+        elsif input == 2 
+            v.name = input_2
+            v.save 
+        elsif input == 3 
+            v.password = input_2
+            v.save 
+        elsif input == 4 
+            v.password_hint = input_2
+            v.save 
+        elsif input == 5 
+            v.street_address = input_2
+            v.save  
+        elsif input == 6 
+            v.city = input_2
+            v.save  
+        elsif input == 7 
+            v.zipcode = input_2
+            v.save 
+        end 
+        system("clear")
+        puts "Your #{att} has been successfully updated to #{input_2}" 
+        CommandLine.venue_profile(v)
+    end 
+
+    def self.venue_information(v)
+        system("clear")
+        puts ""
+        puts "- username: #{v.username}"
+        puts "- street address: #{v.street_address}"
+        puts "- city: #{v.city}"
+        puts "- zip code: #{v.zip_code}"
+        puts "- capacity: #{v.capacity}"
+        puts ""
+        puts "Enter any key to return"
+        input = STDIN.gets.strip
+        Venue.update_account(v)
+    end 
+
     # def create_new_event(artist, date)
     #     art = Artist.find_by(name: artist)
     #     new_event = Event.create(artist_id: art.id, venue_id: self.id, date: date)

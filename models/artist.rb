@@ -42,7 +42,7 @@ class Artist < ActiveRecord::Base
             art.find_event_by_venue 
         elsif input == 8 
             system("clear")
-             
+            art.event_info_trouble
         elsif input == 9 
             system("clear")
             CommandLine.artist_profile(artist)
@@ -66,22 +66,6 @@ class Artist < ActiveRecord::Base
         pretty_print_events(e)
         end 
     end 
-
-    def find_event_by_venue
-        puts "enter venue name"
-        input = STDIN.gets.strip
-        v = input.titleize 
-        my_v = Venue.find_by(name: v)
-        if my_v == nil 
-            puts "No events at the venue"
-            anything_else
-        else 
-        e = Event.where(artist_id: self.id, venue_id: my_v.id)
-        pretty_print_events(e)
-    end 
-
-   
-
 
     def create_event 
         puts "Create New Event"

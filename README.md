@@ -1,59 +1,89 @@
-# Module One Final Project Guidelines
+# GameReviews:
+## Sean Gallivan's Module One: Final Project
+For our Mod 1 final project, after two weeks of instruction, we were given four days and tasked to build a three model system using Ruby with ActiveRecord, SQLite3, and a command line interface (CLI). The use of an API was optional.
 
-Congratulations, you're at the end of module one! You've worked crazy hard to get here and have learned a ton.
+### <br>
 
-For your final project, we'll be building a Command Line database application.
-
-## Project Requirements
-
-### Option One - Data Analytics Project
-
-1. Access a Sqlite3 Database using ActiveRecord.
-2. You should have at minimum three models including one join model. This means you must have a many-to-many relationship.
-3. You should seed your database using data that you collect either from a CSV, a website by scraping, or an API.
-4. Your models should have methods that answer interesting questions about the data. For example, if you've collected info about movie reviews, what is the most popular movie? What movie has the most reviews?
-5. You should provide a CLI to display the return values of your interesting methods.  
-6. Use good OO design patterns. You should have separate classes for your models and CLI interface.
-
-  **Resource:** [Easy Access APIs](https://github.com/learn-co-curriculum/easy-access-apis)
-
-### Option Two - Command Line CRUD App
-
+### <u>Command Line CRUD App Requirements:
 1. Access a Sqlite3 Database using ActiveRecord.
 2. You should have a minimum of three models.
-3. You should build out a CLI to give your user full CRUD ability for at least one of your resources. For example, build out a command line To-Do list. A user should be able to create a new to-do, see all todos, update a todo item, and delete a todo. Todos can be grouped into categories, so that a to-do has many categories and categories have many to-dos.
+3. You should build out a CLI to give your user full CRUD ability for at least one of your resources.
 4. Use good OO design patterns. You should have separate models for your runner and CLI interface.
 
-### Brainstorming and Proposing a Project Idea
+### <br>
 
-Projects need to be approved prior to launching into them, so take some time to brainstorm project options that will fulfill the requirements above.  You must have a minimum of four [user stories](https://en.wikipedia.org/wiki/User_story) to help explain how a user will interact with your app.  A user story should follow the general structure of `"As a <role>, I want <goal/desire> so that <benefit>"`. In example, if we were creating an app to randomly choose nearby restaurants on Yelp, we might write:
+### The Domain</u>:
+My project is called GameReviews (read: "gamer reviews") and is a system to store and read video game reviews. (Most of the data for the Game model was pulled from www.igdb.com website through an API request using an API key.)
 
-* As a user, I want to be able to enter my name to retrieve my records
-* As a user, I want to enter a location and be given a random nearby restaurant suggestion
-* As a user, I should be able to reject a suggestion and not see that restaurant suggestion again
-* As a user, I want to be able to save to and retrieve a list of favorite restaurant suggestions
+### <br>
+
+### The Models</u>:
+- Game:
+  - A Game has:
+    - a name
+    - a lowercase version of the name for searching purposes
+    - a release date
+    - an average rating from IGDB
+    - a total number of ratings from IGDB
+  - A Game has many Reviews.
+  - A Game has many Users through Reviews.
+- User:
+  - A User has:
+    - a name (single word, capitalized)
+  - A User has many Reviews.
+  - A User has many Games through Reviews.
+  - A User can CREATE, READ, UPDATE, or DELETE themself.
+  - A User can CREATE, READ, UPDATE, or DELETE their Reviews.
+- Review:
+  - A Review has:
+    - a rating (1-100)
+    - a review text
+  - A Review belongs to a User and a Game.
+  - A Review can be CREATED, READ, UPDATED, or DELETED by its User.
+
+### <br>
+
+### <u>The CLI</u>:
+
+The CLI has several menu layers that are navigated by the user via numbered (and lettered) options. 
+
+The app user can choose to log in as a User or proceed through the app as a guest. Menu options are dynamically modified according to the current login status.
+
+Guests can navigate to any game in the database and READ any associated reviews. Guests can also CREATE a User account.
+
+In addition to guest privileges, Users have full CRUD priveleges over themself. Users are allowed to CREATE only one Review per Game, but are able to UPDATE or DELETE any of their Reviews. Users can access a list of their Reviewed Games. Users can also log out and become a guest again.
+
+### <br>
+
+### <u>Input Error Handling</u>:
+
+- Menus with Options input:
+  - only allows a single character input
+  - 'ESC' or any arrow key will exit the program
+  - validates remaining inputs against the number of menu options
+  - invalid inputs will redraw the menu with an 'invalid entry' message
+- User Creation input:
+  - omits anything after the first space
+  - eliminates all non-alphanumeric characters
+  - disallows any remaining entry shorter than two characters
+  - is case in-sensitive
+  - disallows 'guest'
+  - disallows already-existing usernames
+  - invalid inputs will redraw the menu with an 'invalid entry' message
+- User Login input:
+  - omits anything after the first space
+  - eliminates all non-alphanumeric characters
+  - disallows any remaining entry shorter than two characters
+  - is case in-sensitive
+  - invalid inputs will redraw the menu with an 'invalid entry' message
+
+
+
+
+## Sources:
+- API from IGDB (www.igdb.com)
+
 
 ## Instructions
 
-1. Fork and clone this repository.
-2. Build your application. Make sure to commit early and commit often. Commit messages should be meaningful (clearly describe what you're doing in the commit) and accurate (there should be nothing in the commit that doesn't match the description in the commit message). Good rule of thumb is to commit every 3-7 mins of actual coding time. Most of your commits should have under 15 lines of code and a 2 line commit is perfectly acceptable.
-3. Make sure to create a good README.md with a short description, install instructions, a contributors guide and a link to the license for your code.
-4. Make sure your project checks off each of the above requirements.
-5. Prepare a video demo (narration helps!) describing how a user would interact with your working project.
-    * The video should:
-      - Have an overview of your project.(2 minutes max)
-6. Prepare a presentation to follow your video.(3 minutes max)
-    * Your presentation should:
-      - Describe something you struggled to build, and show us how you ultimately implemented it in your code.
-      - Discuss 3 things you learned in the process of working on this project.
-      - Address, if anything, what you would change or add to what you have today?
-      - Present any code you would like to highlight.   
-7. *OPTIONAL, BUT RECOMMENDED*: Write a blog post about the project and process.
-
----
-### Common Questions:
-- How do I turn off my SQL logger?
-```ruby
-# in config/environment.rb add this line:
-ActiveRecord::Base.logger = nil
-```
+3. Make sure to inlcude link to the license for your code. ???

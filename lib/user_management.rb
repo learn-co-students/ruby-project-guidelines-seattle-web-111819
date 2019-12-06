@@ -10,7 +10,7 @@ def login
         exit_game_reviews if entry.downcase == "exit"
         main_menu if entry.downcase == "main"
         new_name = ""
-        new_name = entry.split(' ')[0].gsub(/[^a-z]/i, '').downcase.capitalize if entry.length > 0
+        new_name = entry.split(' ')[0].gsub(/[^a-z]/i, '').downcase.capitalize if entry.length > 1
         user = User.find_by(name: new_name)
         entry = nil if !user || user == "guest"
     end
@@ -40,7 +40,7 @@ def create_account
         exit_game_reviews if entry == "exit"
         main_menu if entry == "main"
         new_name = ""
-        new_name = entry.split(' ')[0].gsub(/[^a-z]/i, '').downcase.capitalize if entry.length > 0
+        new_name = entry.split(' ')[0].gsub(/[^a-z]/i, '').downcase.capitalize if entry.length > 1
         if new_name == "Guest"
             message = ["Sorry, 'guest' is not an acceptable name. Please try again..."]
             entry = nil

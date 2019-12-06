@@ -14,6 +14,7 @@ end
 # (ROUTER 2):
 # The Main Menu
 def main_menu(user="guest")
+    game = nil
     router = nil
     message = []
     # base options
@@ -103,6 +104,7 @@ end
 # (ROUTER 15):
 # Options menu for the chosen game
 def game_menu(user, game, tracer=2)
+    choose_game(user) if !game
     reviews = Review.where(game_id: game.id)
     avg_rating = reviews.count == 0 ? " --- " : (reviews.sum(:rating).to_f / reviews.count).round(2)
     myrev = nil
@@ -132,8 +134,11 @@ def game_menu(user, game, tracer=2)
     elsif myrev > 99
         options.delete_at(6)
         options.delete_at(1)
-    elsif Review.find_by(user_id: user.id) == []
+    elsif !Review.find_by(user_id: user.id)
+        options.delete_at(6)
         options.delete_at(4)
+        options.delete_at(3)
+        options.delete_at(2)
     else
         options.delete_at(6)
         options.delete_at(3)
@@ -189,7 +194,7 @@ end
 
 # (ROUTER 13):
 # List the User's Reviewed Games
-def my_reviews(user, tracer=2)
+def my_reviews(user, game, tracer=2)
     router = nil
     message = []
     # base options
@@ -218,7 +223,7 @@ def my_reviews(user, tracer=2)
         message = ["Sorry, invalid selection. Please choose again..."]
     end
     menu_routing(user, Game.find(Review.find(router / 100).game_id), 15, 13) if router > 99
-    menu_routing(user, nil, router, 13)
+    menu_routing(user, game, router, 13)
 end
 
 
@@ -259,63 +264,4 @@ def exit_game_reviews
     puts ""
     system('clear')
     exit
-end
-
-
-
-def graphic_welcome
-    puts "-------------------------------------------------------------------------------------------------------------"
-    puts "|                    __        __     _                                   _                                 |"
-    puts "|                    \\ \\      / /___ | |  ___  ___   _ __ ___    ___     | |_  ___                          |"
-    puts "|                     \\ \\ /\\ / // _ \\| | / __|/ _ \\ | '_ ` _ \\  / _ \\    | __|/ _ \\                         |"
-    puts "|                      \\ V  V /|  __/| || (__| (_) || | | | | ||  __/    | |_| (_) |                        |"
-    puts "|                       \\_/\\_/  \\___||_| \\___|\\___/ |_| |_| |_| \\___|     \\__|\\___/                         |"
-    puts "|                                                                                                           |"
-    puts "|                                                                                                           |"
-end
-
-def graphic_thanks
-    puts "-------------------------------------------------------------------------------------------------------------"
-    puts "|       _____  _                    _               __                               _                      |"
-    puts "|      |_   _|| |__    __ _  _ __  | | __ ___      / _|  ___   _ __      _   _  ___ (_) _ __    __ _        |"
-    puts "|        | |  | '_ \\  / _` || '_ \\ | |/ // __|    | |_  / _ \\ | '__|    | | | |/ __|| || '_ \\  / _` |       |"
-    puts "|        | |  | | | || (_| || | | ||   < \\__ \\    |  _|| (_) || |       | |_| |\\__ \\| || | | || (_| |       |"
-    puts "|        |_|  |_| |_| \\__,_||_| |_||_|\\_\\|___/    |_|   \\___/ |_|        \\__,_||___/|_||_| |_| \\__, |       |"
-    puts "|                                                                                              |___/        |"
-    puts "|                                                                                                           |"
-end
-
-def graphic_bottom
-    puts "|           ________                           __________               .__                                 |"
-    puts "|          /  _____/ _____     _____    ____   \\______   \\  ____ ___  __|__|  ____ __  _  __ ______         |"
-    puts "|         /   \\  ___ \\__  \\   /     \\ _/ __ \\   |       _/_/ __ \\\\  \\/ /|  |_/ __ \\\\ \\/ \\/ //  ___/         |"
-    puts "|         \\    \\_\\  \\ / __ \\_|  Y Y  \\\\  ___/   |    |   \\\\  ___/ \\   / |  |\\  ___/ \\     / \\___ \\          |"
-    puts "|          \\______  /(____  /|__|_|  / \\___  >  |____|_  / \\___  > \\_/  |__| \\___  > \\/\\_/ /____  >         |"
-    puts "|                 \\/      \\/       \\/      \\/          \\/      \\/                \\/             \\/          |"
-    puts "|                                                                                                           |"
-    puts "|                         .:+oyhhddddddddddddddddddddddddddddddddddddddddddddhyso/-`                        |"
-    puts "|                     .+ymMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMmy/.                    |"
-    puts "|                  .odMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMd+`                 |"
-    puts "|                .yMMMMMMMMNhs+/:-------------------------------------------::/+sdNMMMMMMMNo`               |"
-    puts "|              `oMMMMMMMd+.                                                       `-omMMMMMMN+`             |"
-    puts "|             .dMMMMMMy-                                                              -hMMMMMMh`            |"
-    puts "|            -NMMMMMd-         :+ooo+`                                   ./++-          :mMMMMMm.           |"
-    puts "|           .mMMMMMs`         .MMMMMMs                                  /MMMMMs          `hMMMMMd`          |"
-    puts "|           yMMMMMy           .MMMMMMs                                  yMMMMMm           `dMMMMMo          |"
-    puts "|          .MMMMMN`      .....:MMMMMMy.....`                       `..  `odmms.  `.`       -MMMMMN`         |"
-    puts "|          +MMMMMy      yMMMMMMMMMMMMMMMMMMN.                    `sNMMNo`      /mMMMh.      dMMMMM-         |"
-    puts "|          oMMMMMo      mMMMMMMMMMMMMMMMMMMM:                    /MMMMMM-     `NMMMMMy      yMMMMM:         |"
-    puts "|          +MMMMMs      hMMMMMMMMMMMMMMMMMMM-                    `hMMMMs`      +NMMMd-      dMMMMM-         |"
-    puts "|          .MMMMMN`     `-----/MMMMMMy-----.                       `--` `+hdho` `--.       .MMMMMN`         |"
-    puts "|           hMMMMMs           .MMMMMMs                                  sMMMMMd           `hMMMMMo          |"
-    puts "|           .NMMMMMo          .MMMMMMs                                  +MMMMMy          `yMMMMMm`          |"
-    puts "|            :NMMMMMy.         /sssso.        `/++++++++++++++:          -oso:          .dMMMMMm.           |"
-    puts "|             -mMMMMMNo`                    `:dMMMMMMMMMMMMMMMMh-                     .sMMMMMMd.            |"
-    puts "|              `yMMMMMMMy/`              `-omMMMMMMMMMMMMMMMMMMMMdo-               .+hMMMMMMMo`             |"
-    puts "|                -hMMMMMMMMdy+/-....-:+shNMMMMMMMmsoooooooosNMMMMMMMNho/:-...-:/oymMMMMMMMMy.               |"
-    puts "|                  -sNMMMMMMMMMMMMMMMMMMMMMMMMMh/`          `+dMMMMMMMMMMMMMMMMMMMMMMMMMmo.                 |"
-    puts "|                    `:odMMMMMMMMMMMMMMMMMMmy/`                .+yNMMMMMMMMMMMMMMMMMNho-                    |"
-    puts "|                        `-/oyhhhhhhhhys+:`                        .:+syhhhhhhhhso/-`                       |"
-    puts "|                                                                                                           |"
-    puts "-------------------------------------------------------------------------------------------------------------"
 end

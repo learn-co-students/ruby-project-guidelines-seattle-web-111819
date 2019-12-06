@@ -13,11 +13,11 @@ def menu_routing(user, game, router, tracer=2)
     write_review(user, game, tracer) if router == 10
     update_review(user, game, tracer) if router == 11
     change_name(user) if router == 12
-    my_reviews(user, tracer) if router == 13
+    my_reviews(user, game, tracer) if router == 13
     choose_game(user) if router == 14
     game_menu(user, game, tracer) if router == 15
     update_review_rating(user, game, tracer) if router == 16
     update_review_text(user, game, tracer) if router == 17
     delete_review(user, game, tracer) if router == 18
-    read_review(user, game, Review.find(router / 100), tracer) if router > 99
+    read_review(user, Game.find(Review.find(router / 100).game_id), Review.find(router / 100), tracer) if router > 99
 end

@@ -441,6 +441,9 @@ def self.view_all_venues
 end 
 
 def self.view_all_events_2(event)
+    if events = []
+        puts "No events"
+    else
     event.all.each do |e|
         v = Venue.find(e.venue_id)
         a = Artist.find(e.artist_id)
@@ -456,6 +459,7 @@ def self.view_all_events_2(event)
         puts "- City: #{v.city}"
         puts "- Zipcode: #{v.zip_code}"
         puts "- Capacity: #{v.capacity}"
+    end 
     end 
     puts " enter any key"
     input = STDIN.gets.strip
